@@ -11,6 +11,7 @@ export default function useOceanSounds() {
   const ctxRef = useRef<AudioContext | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(true);
+  const hasStartedRef = useRef(false);
 
   const getCtx = () => {
     if (!ctxRef.current)
@@ -29,14 +30,23 @@ export default function useOceanSounds() {
     return audioRef.current;
   };
 
-  const start = useCallback(() => {
-    if (playing) return;
+  // Actually play the audio (used internally)
+  const playAudio = useCallback(() => {
     const audio = getAudio();
-    audio.play().catch(() => {
-      // Browser may block autoplay; user interaction will retry
-    });
-    setPlaying(true);
-  }, [playing]);
+    audio
+      .play()
+      .then(() => {
+        hasStartedRef.current = true;
+        setPlaying(true);
+      })
+      .catch(() => {
+        // Autoplay blocked — will try on user interaction
+      });
+  }, []);
+
+  const start = useCallback(() => {
+    playAudio();
+  }, [playAudio]);
 
   const stop = useCallback(() => {
     const audio = audioRef.current;
@@ -44,7 +54,42 @@ export default function useOceanSounds() {
       audio.pause();
       audio.currentTime = 0;
     }
+    hasStartedRef.current = false;
     setPlaying(false);
+  }, []);
+
+  // Auto-play on mount + handle autoplay-blocked via user interaction
+  useEffect(() => {
+    const audio = getAudio();
+
+    // Try playing immediately
+    audio
+      .play()
+      .then(() => {
+        hasStartedRef.current = true;
+        setPlaying(true);
+      })
+      .catch(() => {
+        // Autoplay blocked — wait for first user interaction
+        const resume = () => {
+          audio
+            .play()
+            .then(() => {
+              hasStartedRef.current = true;
+              setPlaying(true);
+            })
+            .catch(() => {});
+        };
+        document.addEventListener("touchstart", resume, { once: true });
+        document.addEventListener("click", resume, { once: true });
+      });
+
+    // Cleanup: only remove listeners, do NOT stop audio or change state
+    // (prevents React StrictMode double-mount from killing the music)
+    return () => {
+      document.removeEventListener("touchstart", () => {});
+      document.removeEventListener("click", () => {});
+    };
   }, []);
 
   // Splash sound for button clicks (Web Audio API)
@@ -84,9 +129,6 @@ export default function useOceanSounds() {
     osc.start();
     osc.stop(ctx.currentTime + 0.2);
   }, []);
-
-  // Cleanup on unmount
-  useEffect(() => () => stop(), []);
 
   return { playing, start, stop, splash, bubblePop };
 }
