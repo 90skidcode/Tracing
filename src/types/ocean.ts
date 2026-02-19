@@ -24,6 +24,7 @@ export interface HeaderProps {
 
 export interface HeroSectionProps {
   playing: boolean;
+  activeShell: string | null;
   onSplash: () => void;
 }
 

@@ -1,9 +1,18 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { HeroSectionProps } from '../types/ocean';
 import Icon from './ui/Icon';
 
-export default function HeroSection({ playing, onSplash }: HeroSectionProps) {
+export default function HeroSection({ playing, activeShell, onSplash }: HeroSectionProps) {
   const [pearlGlowing, setPearlGlowing] = useState(false);
+  const navigate = useNavigate();
+
+  const handleStart = () => {
+    onSplash();
+    if (activeShell) {
+      navigate(`/letters/${activeShell}`);
+    }
+  };
 
   return (
     <>
@@ -49,8 +58,15 @@ export default function HeroSection({ playing, onSplash }: HeroSectionProps) {
             className="animate-float pearl-btn"
             onMouseEnter={() => setPearlGlowing(true)}
             onMouseLeave={() => setPearlGlowing(false)}
-            onClick={() => { onSplash(); alert("Let's dive in!"); }}
-            style={{ position: "relative", zIndex: 10, width: "var(--pearl-size)", height: "var(--pearl-size)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: "none", cursor: "pointer", transition: "transform 0.1s", ...(pearlGlowing ? { boxShadow: "0 0 40px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.5), inset -5px -5px 15px rgba(0,0,0,0.1)" } : {}) }}
+            onClick={handleStart}
+            style={{
+              position: "relative", zIndex: 10,
+              width: "var(--pearl-size)", height: "var(--pearl-size)",
+              borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+              border: "none", cursor: "pointer", transition: "transform 0.1s",
+              opacity: activeShell ? 1 : 0.6,
+              ...(pearlGlowing ? { boxShadow: "0 0 40px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.5), inset -5px -5px 15px rgba(0,0,0,0.1)" } : {}),
+            }}
             onMouseDown={e => (e.currentTarget.style.transform = "scale(0.95)")}
             onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
           >
@@ -62,7 +78,7 @@ export default function HeroSection({ playing, onSplash }: HeroSectionProps) {
         </div>
 
         <p className="animate-pulse" style={{ marginTop: "1.5rem", color: "white", fontWeight: 900, fontSize: "clamp(1rem, 3vw, 1.25rem)", letterSpacing: "0.05em", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}>
-          Tap the Pearl!
+          {activeShell ? 'Tap the Pearl!' : '⬇ Pick a Shell first!'}
         </p>
       </div>
     </>

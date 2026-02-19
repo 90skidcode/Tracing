@@ -165,6 +165,59 @@ body, #root {
 .sound-toggle:hover { transform: scale(1.05); }
 .sound-toggle:active { transform: scale(0.95); }
 
+/* ─── Tracing Screen ───────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
+/* Shell-shaped button */
+.shell-btn-shape {
+  clip-path: path("M45,85 C45,85 10,65 20,40 C30,15 50,10 65,10 C80,10 100,20 110,40 C120,65 95,85 85,85 L75,100 L55,100 L45,85 Z");
+}
+
+/* Starfish-shaped button */
+.starfish-btn-shape {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* Sparkle animation */
+@keyframes sparkle {
+  0%   { opacity: 0; transform: scale(0.5); }
+  50%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+.animate-sparkle { animation: sparkle 1.5s linear infinite; }
+
+/* Wiggle animation */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+.animate-wiggle { animation: wiggle 1.5s ease-in-out infinite; }
+
+/* Sway for seagrass */
+@keyframes sway {
+  0%   { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+.animate-sway { animation: sway 4s ease-in-out infinite alternate; }
+.animate-sway-reverse { animation: sway 5s ease-in-out 1s infinite alternate-reverse; }
+.animate-sway-delayed { animation: sway 6s ease-in-out 2s infinite alternate; }
+
+/* Slow ping for cursor */
+@keyframes ping-slow {
+  0%   { transform: scale(1); opacity: 0.7; }
+  75%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.animate-ping-slow { animation: ping-slow 2s cubic-bezier(0,0,0.2,1) infinite; }
+
+/* Slow pulse */
+.animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4,0,0.6,1) infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
 /* ─── Responsive Breakpoints ────────────────────────────────────────────────── */
 
 /* Small phones — tighter spacing */
