@@ -3,14 +3,55 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ─── Responsive Custom Properties ──────────────────────────────────────────── */
+
+:root {
+  /* Fluid sizing using clamp(min, preferred, max) */
+  --pearl-size:       clamp(100px, 22vw, 160px);
+  --clam-container:   clamp(180px, 40vw, 280px);
+  --clam-top-w:       clamp(160px, 35vw, 240px);
+  --clam-top-h:       clamp(110px, 24vw, 170px);
+  --clam-bottom-w:    clamp(170px, 37vw, 256px);
+  --clam-bottom-h:    clamp(110px, 24vw, 170px);
+  --shell-size:       clamp(68px, 18vw, 108px);
+  --title-size:       clamp(1.6rem, 5vw, 2.75rem);
+  --title-icon:       clamp(24px, 5vw, 36px);
+  --content-max-width: clamp(320px, 85vw, 560px);
+  --content-padding:  clamp(0.5rem, 2vw, 1rem);
+  --header-padding:   clamp(0.75rem, 3vw, 1.5rem);
+  --star-size:        clamp(240px, 55vw, 400px);
+  --hero-min-height:  clamp(240px, 50vw, 340px);
+  --fish-top-1:       clamp(4rem, 12vw, 8rem);
+  --fish-top-2:       clamp(8rem, 20vw, 16rem);
+  --fish-size-1:      clamp(36px, 8vw, 60px);
+  --fish-size-2:      clamp(28px, 6vw, 40px);
+  --sandy-height:     clamp(80px, 16vw, 120px);
+  --bear-size:        clamp(56px, 12vw, 88px);
+  --avatar-size:      clamp(32px, 6vw, 42px);
+  --avatar-font:      clamp(0.85rem, 2.5vw, 1.125rem);
+  --shell-font:       clamp(1.25rem, 4vw, 1.875rem);
+  --shell-label:      clamp(0.7rem, 2vw, 0.875rem);
+  --pearl-play-icon:  clamp(32px, 7vw, 48px);
+  --pearl-start-font: clamp(0.9rem, 3vw, 1.25rem);
+}
+
 body, #root {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
 }
 
 .bg-water {
+  width: 100%;
   background: linear-gradient(180deg, #A2D2FF 0%, #48E5C2 50%, #008C9E 100%);
 }
+
+/* ─── Bubble Size Utilities ─────────────────────────────────────────────────── */
+
+.w-4.h-4  { width: 16px; height: 16px; }
+.w-5.h-5  { width: 20px; height: 20px; }
+.w-6.h-6  { width: 24px; height: 24px; }
+.w-8.h-8  { width: 32px; height: 32px; }
+.w-10.h-10 { width: 40px; height: 40px; }
 
 /* ─── Animations ────────────────────────────────────────────────────────────── */
 
@@ -122,3 +163,27 @@ body, #root {
 .sound-toggle { transition: all 0.2s; }
 .sound-toggle:hover { transform: scale(1.05); }
 .sound-toggle:active { transform: scale(0.95); }
+
+/* ─── Responsive Breakpoints ────────────────────────────────────────────────── */
+
+/* Small phones — tighter spacing */
+@media (max-width: 360px) {
+  :root {
+    --header-padding: 0.5rem;
+  }
+  .header-username { display: none !important; }
+}
+
+/* Tablets — more breathing room */
+@media (min-width: 768px) {
+  :root {
+    --content-max-width: 680px;
+  }
+}
+
+/* Desktop — cap width and center */
+@media (min-width: 1024px) {
+  :root {
+    --content-max-width: 720px;
+  }
+}
